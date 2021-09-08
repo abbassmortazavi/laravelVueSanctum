@@ -5,7 +5,7 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h1 class="mb-0">Category</h1>
-                        <a href="" class="btn btn-dark btn-sm float-right">Create Product</a>
+                        <router-link class="btn btn-dark btn-sm float-right" :to="{ name: 'Create' }">Create Product</router-link>
                     </div>
 
                     <div class="card-body">
