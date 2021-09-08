@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from "../components/Home";
 import Index from '../components/views/category/Index';
 import Create from "../components/views/category/Create";
+import Edit from "../components/views/category/Edit";
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ const routes = [
         path: '/category/create',
         name: 'Create',
         component : Create,
+    },
+    {
+        path: '/category/edit/:slug',
+        name: 'Edit',
+        component : Edit,
     }
 
 ];

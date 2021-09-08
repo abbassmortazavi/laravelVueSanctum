@@ -20,13 +20,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <td>1</td>
-                                    <td>Laravel</td>
-                                    <td>laravel-vue</td>
-                                    <td>
-                                        <a href="" class="btn btn-sm btn-info">Edit</a>
-                                        <a href="" class="btn btn-sm btn-danger">Delete</a>
-                                    </td>
+                                    <tr v-for="cat in categories" :key="cat.id">
+                                        <td>{{ cat.id }}</td>
+                                        <td>{{ cat.name }}</td>
+                                        <td>{{ cat.slug }}</td>
+                                        <td>
+                                            <router-link :to="{name: 'Edit' , params:{'slug':cat.slug}}" class="btn btn-sm btn-info">Edit</router-link>
+                                            <a href="" class="btn btn-sm btn-danger">Delete</a>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -39,7 +41,26 @@
 
 <script>
 export default {
-    name: "Index"
+    name: "Index",
+    data(){
+        return{
+            categories :[]
+        }
+    },
+    methods:{
+        getAllCategory(){
+            axios.get('/api/categories')
+            .then(res=>{
+                console.log(res);
+                this.categories = res.data;
+            }).catch(err=>{
+                console.log(err);
+            });
+        },
+    },
+    mounted(){
+        this.getAllCategory();
+    }
 }
 </script>
 
