@@ -5,6 +5,7 @@ import router from './routes/routes.js';
 
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('app-header', require('./components/views/section/Header').default);
 
 
 
