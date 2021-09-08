@@ -11,11 +11,11 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-6 offset-3">
-                                <form @submit.prevent="createCategory">
+                                <form @submit.prevent="createCategory" @keydown="form.onKeydown($event)">
                                     <div class="form-group">
                                         <label for="">Category Name</label>
-                                        <input type="text" v-model="name" class="form-control">
-                                        <span v-if="errors.name">{{ errors.name }}</span>
+                                        <input type="text" v-model="form.name" class="form-control">
+                                        <div class="alert alert-danger" v-if="form.errors.has('name')" v-html="form.errors.get('name')" />
                                     </div>
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-sm btn-success">Create</button>
@@ -31,23 +31,24 @@
 </template>
 
 <script>
+import Form from 'vform'
 export default {
     name: "Create",
     data(){
         return{
-            name: '',
-            errors: ''
+            form: new Form({
+                name: ''
+            })
         }
     },
     methods:{
         createCategory(){
-            axios.post('/api/categories' , {name:this.name})
+            this.form.post('/api/categories')
             .then(res=>{
                 console.log(res);
             }).catch(err=>{
-                this.errors = err.errors.name;
-                console.log(this.errors);
-            });
+                console.log(err);
+            })
         }
     }
 }
