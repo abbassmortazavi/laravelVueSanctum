@@ -45,9 +45,15 @@ export default {
         createCategory(){
             this.form.post('/api/categories')
             .then(res=>{
+                //this.$swal('hey!!!');
+                toast.fire({
+                    icon: 'success',
+                    title: 'Signed in successfully'
+                });
+                this.form.name = "";
                 console.log(res);
             }).catch(err=>{
-                console.log(err);
+                console.log(err.errors.name);
             })
         }
     }
