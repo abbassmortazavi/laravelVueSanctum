@@ -66,7 +66,12 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        if ($category)
+        {
+            return response()->json($category , 200);
+        }else{
+            return response()->json('error' , 500);
+        }
     }
 
     /**
@@ -78,7 +83,14 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $this->validate($request , [
+            'name'=>"required|unique:categories,name,$category->id"
+        ]);
+        $category->update([
+            'name'=>$request->name,
+            'slug'=>Str::slug($request->name , '-')
+        ]);
+        return response()->json('updated ok' , 200);
     }
 
     /**
@@ -89,6 +101,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return response()->json('deleted ok ' , 200);
     }
 }

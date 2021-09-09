@@ -2217,21 +2217,30 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    createCategory: function createCategory() {
+    editCategory: function editCategory() {
       var _this = this;
 
-      this.form.post('/api/categories').then(function (res) {
-        //this.$swal('hey!!!');
+      var id = this.$route.params.id;
+      axios.get("/api/categories/".concat(id, "/edit")).then(function (res) {
+        _this.form.name = res.data.name;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    updateCategory: function updateCategory() {
+      var id = this.$route.params.id;
+      this.form.put('/api/categories/' + id).then(function (res) {
         toast.fire({
           icon: 'success',
-          title: 'Signed in successfully'
+          title: 'Updated in successfully'
         });
-        _this.form.name = "";
-        console.log(res);
       })["catch"](function (err) {
-        console.log(err.errors.name);
+        console.log(err);
       });
     }
+  },
+  mounted: function mounted() {
+    this.editCategory();
   }
 });
 
@@ -2303,6 +2312,21 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/api/categories').then(function (res) {
         console.log(res);
         _this.categories = res.data;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    deleteCategory: function deleteCategory(cat) {
+      var _this2 = this;
+
+      axios["delete"]('/api/categories/' + cat.id).then(function (res) {
+        _this2.getAllCategory();
+
+        toast.fire({
+          icon: 'success',
+          title: 'Deleted in successfully'
+        }); // let index = this.categories.indexOf(cat);
+        // this.categories.splice(index , 1);
       })["catch"](function (err) {
         console.log(err);
       });
@@ -2482,7 +2506,7 @@ var routes = [{
   name: 'Create',
   component: _components_views_category_Create__WEBPACK_IMPORTED_MODULE_2__["default"]
 }, {
-  path: '/category/edit/:slug',
+  path: '/category/:id/edit',
   name: 'Edit',
   component: _components_views_category_Edit__WEBPACK_IMPORTED_MODULE_3__["default"]
 }];
@@ -42021,7 +42045,7 @@ var render = function() {
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
-                        return _vm.createCategory.apply(null, arguments)
+                        return _vm.updateCategory.apply(null, arguments)
                       },
                       keydown: function($event) {
                         return _vm.form.onKeydown($event)
@@ -42086,7 +42110,7 @@ var staticRenderFns = [
       _c(
         "button",
         { staticClass: "btn btn-sm btn-success", attrs: { type: "submit" } },
-        [_vm._v("Create")]
+        [_vm._v("Update")]
       )
     ])
   }
@@ -42161,7 +42185,7 @@ var render = function() {
                             {
                               staticClass: "btn btn-sm btn-info",
                               attrs: {
-                                to: { name: "Edit", params: { slug: cat.slug } }
+                                to: { name: "Edit", params: { id: cat.id } }
                               }
                             },
                             [_vm._v("Edit")]
@@ -42171,7 +42195,11 @@ var render = function() {
                             "a",
                             {
                               staticClass: "btn btn-sm btn-danger",
-                              attrs: { href: "" }
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteCategory(cat)
+                                }
+                              }
                             },
                             [_vm._v("Delete")]
                           )
